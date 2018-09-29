@@ -1,7 +1,6 @@
-# HappyShare
-Assignment for CCAD
+# HappyShare (Assignment for CCAD)
 
-After download, pls change the connection string for db in appsettings.json:
+# After download, pls change the connection string for db in appsettings.json:
 
  "ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=HappeShare;Trusted_Connection=True;MultipleActiveResultSets=true",
