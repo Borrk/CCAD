@@ -1,2 +1,2 @@
-# CCAD
+# HappyShare
 Assignment for CCAD
