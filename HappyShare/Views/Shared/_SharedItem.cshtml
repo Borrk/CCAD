@@ -1,0 +1,30 @@
+﻿@model  HappyShare.Models.SharedItem
+
+<style>
+    .myproduct-img {
+        object-fit: cover;
+        width: auto;
+        height: 300px;
+        max-width:100%;
+    }
+</style>
+
+<div>
+    <a asp-area="" asp-controller="SharedItems" asp-action="Details" asp-route-ID="@Model.ID">
+        <img class="myproduct-img" src=@Model.PictureLink alt="productpic">
+    </a>
+</div>
+
+<!-- Item detail -->
+<div>
+    <div>
+        <a asp-area="" asp-controller="SharedItems" asp-action="Details" asp-route-ID="@Model.ID">
+            <h4> @Html.DisplayFor(modelitem => modelitem.Name)</h4>
+        </a>        
+        <h4> <span style="color:aquamarine">@Html.DisplayFor(modelitem => modelitem.Type)</span></h4>
+        <h4> <span style="color:chocolate">@Html.DisplayFor(modelitem => modelitem.Category.Name)</span></h4>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" onclick="location.href=''"><span class="glyphicon glyphicon-shopping-cart"/> Add to Favorites</button> 
+    </div>
+</div>

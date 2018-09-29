@@ -1,0 +1,80 @@
+﻿@model HappyShare.Models.SharedItemViewModels.SharedItemViewModel
+
+@{
+    ViewData["Title"] = "Shares";
+}
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-3 column">
+            <h3>Categories </h3>
+        </div>
+
+        <div class="col-md-8 column">
+            @*Search box starts*@
+            <form class="navbar-form navbar-left" asp-controller="SharedItem" asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" method="get">
+                <div class="form-group">
+                    <input id="searchString" type="text" style="min-width:200px" class="form-control" name="SearchString" placeholder="Type name to search" value="@ViewData["CurrentFilter"]">
+                    <button type="submit" value="Search" class="btn btn-default" > <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </form>
+            @*Search box ends*@
+        </div>
+
+        <br />  <br />
+    </div>
+
+    <div class="row clearfix">
+
+        <!-- Product category list -->
+        <div class="col-md-3 column">
+            <div class="list-group">
+                @{
+                    IEnumerable<Category> category = Model.Categories.ToList();
+
+                    int productCount = Model.Categories.Sum(c => c.SharedItems.Count);
+                    <a asp-area="" class="list-group-item active" asp-controller="SharedItems" asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]"><span class="badge">@Html.DisplayFor(modelitem => productCount) </span> All Categories </a>
+
+                    var active = false;
+                    foreach (var c in category)
+                    {
+                        productCount = c.SharedItems.Count();
+                        if (true == active)
+                        {
+                            <a asp-area="" class="list-group-item active" asp-controller="SharedItems" asp-action="Index" asp-route-categoryID="@c.CategoryID" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                <span class="badge">@Html.DisplayFor(modelitem => productCount) </span> @Html.DisplayFor(modelitem => c.Name)
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-area="" class="list-group-item" asp-controller="SharedItems" asp-action="Index" asp-route-categoryID="@c.CategoryID" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                <span class="badge">@Html.DisplayFor(modelitem => productCount) </span> @Html.DisplayFor(modelitem => c.Name)
+                            </a>
+                        }
+                        active = !active;
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- Product list -->
+        <div class="col-md-9 column">
+            <div class="row">
+
+                @{
+                    IEnumerable<SharedItem> pp = Model.SharedItems.ToList();
+                    foreach (var p in pp)
+                    {
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                @{await Html.RenderPartialAsync("_SharedItem", p); }
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
