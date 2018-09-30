@@ -4,12 +4,38 @@
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<!-- This is an example code for Google map API usage -->
+<div id="map" style="width:300px;height:150px"></div>
+<script>
+
+    function initMap() {
+        var myLatLng = { lat: -36.86293, lng: 174.8562 };
+
+        // for showing stuff.
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: myLatLng
+        });
+
+        // set marker, showing stuff position in map
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'St Heliers!'
+        });
+
+        // get location from clieck event: for set postion when sharing stuff.
+        map.addListener('click', function (e) {
+            map.setZoom(8);
+            map.setCenter(e.latLng);
+        });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnChPKz4KMrT60Mo10p13CMjP2MZ8Nmo8&callback=initMap">
+</script>
+
+
 
 <address>
     <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
