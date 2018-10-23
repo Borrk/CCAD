@@ -12,10 +12,15 @@
 
         <div class="col-md-8 column">
             @*Search box starts*@
-            <form class="navbar-form navbar-left" asp-controller="SharedItem" asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" method="get">
+            <form class="navbar-form navbar-left" asp-controller="SharedItems" asp-action="Index" method="get">
                 <div class="form-group">
-                    <input id="searchString" type="text" style="min-width:200px" class="form-control" name="SearchString" placeholder="Type name to search" value="@ViewData["CurrentFilter"]">
-                    <button type="submit" value="Search" class="btn btn-default" > <i class="glyphicon glyphicon-search"></i>
+                    <input type="text" id="search-txt" style="min-width:200px" class="form-control" name="searchString" placeholder="Type name to search" value="@ViewData["CurrentFilter"]">
+                    <input type="hidden" class="form-control" name="categoryID" value="@ViewData["categoryID"]" />
+                    <button type="button" id="audio-search-btn" value="audio" class="btn btn-default">
+                        <span class="glyphicon glyphicon-signal"></span>
+                    </button>
+                    <button type="submit" id="search-btn" value="Search" class="btn btn-default">
+                        <i class="glyphicon glyphicon-search"></i>
                     </button>
                 </div>
             </form>
@@ -77,4 +82,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/js/speech2text.js"></script>
+
 </div>

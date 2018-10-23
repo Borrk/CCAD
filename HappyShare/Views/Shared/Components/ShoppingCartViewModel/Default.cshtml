@@ -1,0 +1,77 @@
+﻿@model HappyShare.Models.ShoppingCartViewModels.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+
+<div class="cart-container">
+    <ul class="cd-cart-items">
+        <li>
+            <h2><span class="glyphicon glyphicon glyphicon-shopping-cart"></span></h2>
+        </li>
+
+        <li>
+            <div class="row">
+                <div class="col-sm-1">
+                    <!-- place holder -->
+                </div>
+                <div class="col-sm-2">
+                    <h4 class="display-4">Name</h4>
+                </div>
+                <div class="col-sm-2">
+                    <h4 class="display-4">Category</h4>
+                </div>
+                <div class="col-sm-2">
+                    <h4 class="display-4">Picture</h4>
+                </div>
+                <div class="col-sm-3">
+                    <h4 class="display-4">Posted date</h4>
+                </div>
+                <div class="col-sm-1">
+                    <h4 class="display-4">Remove</h4>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="cd-cart-items">
+        @foreach (var item in Model.CartItems)
+        {
+            <li>
+                <div class="row">
+                    <div class="col-sm-1">
+                        <!-- place holder -->
+                    </div>
+                    <div class="col-sm-2"><a asp-controller="SharedItems" asp-action="Details" asp-route-id="@item.SharedItem.ID">@item.SharedItem.Name</a> </div>
+                    <div class="col-sm-2">@item.SharedItem.Category.Name</div>
+                    <div class="col-sm-2"><img src="@Href("~" + item.SharedItem.PictureLink)" style="width:100px;height:auto;min-height:80px; max-height:150px" onerror="this.onerror = null" /></div>
+                    <div class="col-sm-3">@item.SharedItem.PostTime.ToLongDateString()</div>
+                    <div class="col-sm-1"><a asp-action="RemoveFromCart" asp-controller="ShoppingCart" asp-route-id="@item.SharedItem.ID"><span class="glyphicon glyphicon-remove-circle"></span></a></div>
+                </div>
+            </li>
+        }
+    </ul> <!-- cd-cart-items -->
+
+    <ul class="cd-cart-items">
+        <li>
+            
+            @if (@Model.CartItems.Count > 0)
+            {
+                <ul class="cd-cart-items">
+                    <li>
+                        <div class="row">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-primary btn-lg"
+                                        onclick="location.href='@Url.Action("ClearCart", "ShoppingCart")'">
+                                    <span class="glyphicon glyphicon-trash" /> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+        </li>
+    </ul>
+</div>

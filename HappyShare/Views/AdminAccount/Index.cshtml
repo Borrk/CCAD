@@ -1,0 +1,50 @@
+﻿@model IEnumerable<HappyShare.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Accounts";
+}
+
+<h2>Manage Accounts</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full name</th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @{
+                    var fullname = item.FirstName + " " + item.LastName;
+                    @fullname;
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+
+        </tr>
+        }
+    </tbody>
+</table>

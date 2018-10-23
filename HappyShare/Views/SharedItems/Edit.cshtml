@@ -9,39 +9,14 @@
 <h4>SharedItem</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <form asp-action="Edit">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PictureLink" class="control-label"></label>
-                <input asp-for="PictureLink" class="form-control" />
-                <span asp-validation-for="PictureLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContactorPhone" class="control-label"></label>
-                <input asp-for="ContactorPhone" class="form-control" />
-                <span asp-validation-for="ContactorPhone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContactorEmail" class="control-label"></label>
-                <input asp-for="ContactorEmail" class="form-control" />
-                <span asp-validation-for="ContactorEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
@@ -54,14 +29,34 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ContactorPhone" class="control-label"></label>
+                <input asp-for="ContactorPhone" class="form-control" />
+                <span asp-validation-for="ContactorPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactorEmail" class="control-label"></label>
+                <input asp-for="ContactorEmail" class="form-control" />
+                <span asp-validation-for="ContactorEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
-        </form>
-    </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <!-- Just for keep the link -->
+                <input type="hidden" asp-for="PictureLink" class="form-control" hidden="hidden" />
+            </div>
+            <img style="width:300px;height:auto;min-height:150px; max-height:260px" src="@Href("~" + Model.PictureLink)" alt="Change picture" onerror="this.onerror = null" />
+
+        </div>
+
+    </form>
+
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="ManageItems">Back to List</a>
 </div>
 
 @section Scripts {

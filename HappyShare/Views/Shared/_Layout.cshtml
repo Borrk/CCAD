@@ -8,19 +8,17 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/css/Layout.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/Layout.css" />
     </environment>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container" style="padding-left:5px; padding-right:5px">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -29,7 +27,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
-                    <img style="max-height:30px" alt="HappyShare" src="~/images/Logo-small.jpg" />
+                    <img style="height:24px; max-width:64px" alt="HappyShare" src="~/images/Logo-small.jpg" />
                 </a>
             </div>
             <div class="navbar-collapse collapse">
@@ -37,19 +35,17 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="SharedItems" asp-action="Index">Shares</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="Products" asp-action="Index">Manage Items</a></li>
-                                <li><a asp-area="" asp-controller="AdminAccount" asp-action="Index">Manage users</a></li>
-                            </ul>
-                        </li>
-                    }
-
+                    
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="SharedItems" asp-action="ManageItems">Manage Items</a></li>
+                                    <li><a asp-area="" asp-controller="AdminAccount" asp-action="Index">Manage users</a></li>
+                                </ul>
+                            </li>
+                        }
                 </ul>
 
                 @await Html.PartialAsync("_LoginPartial")
@@ -60,7 +56,7 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Donate">Donate</a></li>
 
                     <li>
-                        <a id="cd-cart-trigger"><span class="glyphicon glyphicon-shopping-cart"></span>Favorites<span class="badge">2 @* @ShoppingCart.GetCart(this.Context).GetCount((HappyShare.Data.ApplicationDbContext)(this.Context.RequestServices.GetService(typeof(HappyShare.Data.ApplicationDbContext)))) *@</span></a>
+                        <a id="cd-cart-trigger"><span class="glyphicon glyphicon-star"></span>Favorites<span class="badge">@ShoppingCart.GetCart(this.Context).GetCount((HappyShare.Data.ApplicationDbContext)(this.Context.RequestServices.GetService(typeof(HappyShare.Data.ApplicationDbContext))))</span></a>
                     </li>
                 </ul>
 
@@ -68,45 +64,51 @@
         </div>
     </nav>
 
-    <div id="cd-shadow-layer"></div>
-
-    <div id="cd-cart">
-        @*@if (!User.IsInRole("Admin"))
-        {
-            @await Component.InvokeAsync("ShoppingCartViewModel")
-        }
-        *@
-    </div>
 
     <div class="container body-content">
         @RenderBody()
+
         <hr />
 
-        <footer class="footer">
-            <div class="container">
-                <br />
-                <div class="footer-left">
-                    <img src="/images/Logo.jpg" width="180" alt="Happy Share">
-                    <p class="footer-copyright">© 2018 - Happy Share</p>
-                </div>
+        <div id="cd-shadow-layer"></div>
 
-                <div class="footer-center">
-                    <div>
-                        <i class="fa fa-map-marker"></i>
-                        <p><span>Building 183, 139 Carrington Road </span>Mt Albert, Auckland, New Zealand</p>
-                    </div>
-                    <div>
-                        <i class="fa fa-phone"></i>
-                        <p>09 800-123-457</p>
-                    </div>
-                    <div>
-                        <i class="fa fa-envelope"></i>
-                        <p><a href="mailto:support@wallstreetwines.co.nz">support@HappyShares.co.nz</a></p>
-                    </div>
+        <div id="cd-cart">
+
+            @if (!User.IsInRole("Admin"))
+            {
+                @await Component.InvokeAsync("ShoppingCartViewModel")
+            }
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <br />
+            <div class="footer-left">
+                <img src="/images/Logo.jpg" width="180" alt="Happy Share">
+                <p class="footer-copyright">© 2018 - Happy Share</p>
+            </div>
+
+            <div class="footer-center">
+                <div>
+                    <i class="fa fa-map-marker"></i>
+                    <p><span>Building 183, 139 Carrington Road </span>Mt Albert, Auckland, New Zealand</p>
+                </div>
+                <div>
+                    <i class="fa fa-phone"></i>
+                    <p>09 800-123-457</p>
+                </div>
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <p><a href="mailto:support@wallstreetwines.co.nz">support@HappyShares.co.nz</a></p>
                 </div>
             </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
+
+
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -129,6 +131,8 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    <script src="~/js/Cart.js" asp-append-version="true"></script>
+   
     @RenderSection("Scripts", required: false)
 </body>
 </html>

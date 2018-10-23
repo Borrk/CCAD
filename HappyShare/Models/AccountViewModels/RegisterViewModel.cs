@@ -23,5 +23,10 @@ namespace HappyShare.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Invalid Phone Number.")]
+        [Display(Name = "Phone Number(Mobile)")]
+        public virtual string MobilePhoneNumber { get; set; }
     }
 }
