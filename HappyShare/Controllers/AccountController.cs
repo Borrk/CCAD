@@ -13,6 +13,8 @@ using Microsoft.Extensions.Options;
 using HappyShare.Models;
 using HappyShare.Models.AccountViewModels;
 using HappyShare.Services;
+using Microsoft.Extensions.Configuration;
+using HappyShare.Data;
 
 namespace HappyShare.Controllers
 {
@@ -24,21 +26,29 @@ namespace HappyShare.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IConfiguration configuration,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
+
+            Configuration = configuration;
         }
 
         [TempData]
         public string ErrorMessage { get; set; }
+
+        public IConfiguration Configuration { get; }
 
         [HttpGet]
         [AllowAnonymous]
@@ -59,11 +69,33 @@ namespace HappyShare.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                // Require the user to have a confirmed email before they can log on.
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return View(model);
+                }
+                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // clear shopping cart if it is an admin account                    
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        var cart = ShoppingCart.GetCart(this.HttpContext);
+                        cart.EmptyCart(_context);
+                    }
+
+                    // merge shopping cart to current user
+                    if (await _userManager.IsInRoleAsync(user, "Member"))
+                    {
+                        var cart = ShoppingCart.GetCart(this.HttpContext);
+                        cart.ResetShoppingcartId(user.Id, this.HttpContext, _context);
+                    }
+
+
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -220,10 +252,13 @@ namespace HappyShare.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, MobilePhoneNumber=model.MobilePhoneNumber };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // Add to member role
+                    await _userManager.AddToRoleAsync(user, "Member");
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -245,6 +280,12 @@ namespace HappyShare.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
+            {
+                var newId = Guid.NewGuid();
+                var cart = ShoppingCart.GetCart(this.HttpContext);
+                cart.ResetShoppingcartId(newId.ToString(), this.HttpContext);
+            }
+
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");

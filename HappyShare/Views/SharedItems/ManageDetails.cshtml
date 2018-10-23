@@ -1,0 +1,64 @@
+﻿@model QualitySouvenir.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Product Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            $@Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Supplier.Name)
+        </dd>
+        <dt>
+        </dt>
+        <dd>
+            <img style="width:300px;height:auto;min-height:150px; max-height:260px" src="@Href("~" + Model.PictureLink)" alt="Change picture" onerror="this.onerror = null" />
+        </dd>
+
+        @if (!User.IsInRole("Admin"))
+        {
+            <div>
+                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddToCart", "ShoppingCart", new { id = Model.ProductID })'"><span class="glyphicon glyphicon-shopping-cart" /> Add to Cart</button>
+            </div>
+        }
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

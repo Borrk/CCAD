@@ -11,23 +11,15 @@
     <h4>SharedItem</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt></dt>
+        <dd>
+            <img style="width:100px;height:auto;min-height:80px; max-height:150px" onerror="this.onerror = null" src="@Href("~" + Model.PictureLink)" alt="Change picture" />
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PictureLink)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PictureLink)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Location)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Address)
@@ -64,6 +56,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="ManageItems">Back to List</a>
     </form>
 </div>

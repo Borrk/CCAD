@@ -28,6 +28,7 @@ namespace HappyShare.Models
                 {
                     SharedItem = item,
                     CartID = ShoppingCartId,
+                    ProductID = item.ID
                 };
                 db.CartItems.Add(cartItem);
             }
@@ -66,6 +67,93 @@ namespace HappyShare.Models
 
             return cartItems;
 
+        }
+
+        public void ResetShoppingcartId(string newId, HttpContext context)
+        {
+            if (ShoppingCartId == newId)
+            {
+                return;
+            }
+
+            // set cart id to new one
+            ShoppingCartId = newId;
+            context.Session.SetString(CartSessionKey, ShoppingCartId);
+        }
+        public void ResetShoppingcartId(string newId, HttpContext context, ApplicationDbContext db)
+        {
+            if (ShoppingCartId == newId)
+            {
+                return;
+            }
+
+            // firstly, we need check if all the products in our cart are avaliable.
+            var cit = db.CartItems.Where(i => i.ProductID >= 0).AsNoTracking().ToList();
+            foreach (var i in cit)
+            {
+                var product = db.SharedItems.SingleOrDefault(p => p.ID == i.ProductID);
+                if (product == null)
+                {
+                    db.CartItems.Remove(i);
+                }
+            }
+            db.SaveChanges();
+
+            var cartItems = db.CartItems.Where(cart => cart.CartID == ShoppingCartId);
+            foreach (var cartItem in cartItems)
+            {
+                // check if product is avaliable
+                var product = db.SharedItems.SingleOrDefault(p => p.ID == cartItem.ProductID);
+                if (product == null)
+                {
+                    db.CartItems.Remove(cartItem);
+                    continue;
+                }
+
+                cartItem.CartID = newId;
+                var ci = db.CartItems.SingleOrDefault(c => c.CartID == newId && c.ProductID == cartItem.ProductID);
+                if (ci == null)
+                {
+                    db.Update(cartItem);
+                }
+                else  // merge cart items
+                {
+                    db.Update(ci);
+
+                    db.CartItems.Remove(cartItem);
+                }
+            }
+
+            db.SaveChanges();
+
+            // set cart id to new one
+            ShoppingCartId = newId;
+            context.Session.SetString(CartSessionKey, ShoppingCartId);
+
+            //var cartItems = db.CartItems.Include( i => i.Product).Where(cart => cart.CartID == ShoppingCartId);
+            //foreach (var cartItem in cartItems)
+            //{
+            //    cartItem.CartID = newId;
+
+            //    var ci = db.CartItems.SingleOrDefault(c => c.CartID == newId && c.Product.ProductID == cartItem.Product.ProductID);
+            //    if (ci == null)
+            //    {
+            //        db.Update(cartItem);
+            //    }
+            //    else  // merge cart items
+            //    {
+            //        ci.Count += cartItem.Count;
+            //        db.Update(ci);
+
+            //        db.CartItems.Remove(cartItem);
+            //    }                
+            //}
+
+            //db.SaveChanges();
+
+            //// set cart id to new one
+            //ShoppingCartId = newId;
+            //context.Session.SetString(CartSessionKey, ShoppingCartId);
         }
 
         public int GetCount(ApplicationDbContext db)

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HappyShare.Data;
 using HappyShare.Models;
 using HappyShare.Models.SharedItemViewModels;
+using Newtonsoft.Json.Linq;
 
 namespace HappyShare.Controllers
 {
@@ -21,9 +22,17 @@ namespace HappyShare.Controllers
         }
 
         // GET: SharedItems
+        public async  Task<IActionResult> ManageItems()
+        {
+            var items = await _context.SharedItems.Include(p => p.Category).AsNoTracking().ToListAsync();
+            return View(items);
+        }
+
+        // GET: SharedItems
         public async Task<IActionResult> Index(string searchString, int? categoryID)
         {
             ViewData["CurrentFilter"] = searchString;
+            ViewData["categoryID"] = categoryID ?? 0;
 
             var pvm = new SharedItemViewModel
             {
@@ -32,15 +41,15 @@ namespace HappyShare.Controllers
 
             // All the categories
             if (categoryID == null || categoryID <= 0)
-                pvm.SharedItems = await _context.SharedItems.Include(p => p.Category).ToListAsync();
+                pvm.SharedItems = await _context.SharedItems.Include(p => p.Category).OrderByDescending( p => p.PostTime).ToListAsync();
             else
                 pvm.SharedItems = await _context.SharedItems.Where(c => c.Category.CategoryID == categoryID)
-                    .Include(p => p.Category).ToListAsync();
+                    .Include(p => p.Category).OrderByDescending(p => p.PostTime).ToListAsync();
 
             // searching condition
             if (!string.IsNullOrEmpty(searchString))
             {
-                pvm.SharedItems = pvm.SharedItems.Where(p => p.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                pvm.SharedItems = pvm.SharedItems.Where(p => p.Name.ToLower().Contains(searchString.ToLower())).OrderByDescending(p => p.PostTime).ToList();
             }
 
             return View(pvm);
@@ -54,12 +63,12 @@ namespace HappyShare.Controllers
                 return NotFound();
             }
 
-            var sharedItem = await _context.SharedItems
+            var sharedItem = await _context.SharedItems.Include( i=>i.Category)
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (sharedItem == null)
             {
                 return NotFound();
-            }
+            }           
 
             return View(sharedItem);
         }
@@ -107,9 +116,15 @@ namespace HappyShare.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,PictureLink,Location,Address,ContactorPhone,ContactorEmail,Type,Description")] SharedItem sharedItem)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Address,ContactorPhone,ContactorEmail,Type,Description")] SharedItem sharedItem)
         {
             if (id != sharedItem.ID)
+            {
+                return NotFound();
+            }
+
+            var oldItem = _context.SharedItems.Single(i => i.ID == id);
+            if ( oldItem == null)
             {
                 return NotFound();
             }
@@ -118,7 +133,14 @@ namespace HappyShare.Controllers
             {
                 try
                 {
-                    _context.Update(sharedItem);
+                    oldItem.Name = sharedItem.Name;
+                    oldItem.Type = sharedItem.Type;
+                    oldItem.Description = sharedItem.Description;
+                    oldItem.ContactorEmail = sharedItem.ContactorEmail;
+                    oldItem.ContactorPhone = sharedItem.ContactorPhone;
+                    oldItem.Address = sharedItem.Address;
+
+                    _context.Update(oldItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -132,7 +154,7 @@ namespace HappyShare.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ManageItems));
             }
             return View(sharedItem);
         }
@@ -163,7 +185,7 @@ namespace HappyShare.Controllers
             var sharedItem = await _context.SharedItems.SingleOrDefaultAsync(m => m.ID == id);
             _context.SharedItems.Remove(sharedItem);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ManageItems));
         }
 
         private bool SharedItemExists(int id)

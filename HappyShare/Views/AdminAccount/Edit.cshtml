@@ -1,0 +1,64 @@
+﻿@model AccountViewModelBase
+@{
+    ViewData["Title"] = "Edit account";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-userId="@ViewData["userId"]" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input type="email" asp-for="Email" class="form-control" value="@Model.Email" disabled />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Email" class="form-control" value="@Model.Email" />
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" value="@Model.FirstName" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" value="@Model.LastName" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HomePhoneNumber"></label>
+                <input asp-for="HomePhoneNumber" class="form-control" value="@Model.HomePhoneNumber" />
+                <span asp-validation-for="HomePhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkPhoneNumber"></label>
+                <input asp-for="WorkPhoneNumber" class="form-control" value="@Model.WorkPhoneNumber" />
+                <span asp-validation-for="WorkPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobilePhoneNumber"></label>
+                <input asp-for="MobilePhoneNumber" class="form-control" value="@Model.MobilePhoneNumber" />
+                <span asp-validation-for="MobilePhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <input asp-for="Address" class="form-control" value="@Model.Address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </form>
+
+        <a asp-action="Index">Back to List</a>
+
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

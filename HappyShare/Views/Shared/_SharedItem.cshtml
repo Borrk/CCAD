@@ -1,17 +1,18 @@
-﻿@model  HappyShare.Models.SharedItem
+﻿@model HappyShare.Models.SharedItem
 
 <style>
     .myproduct-img {
         object-fit: cover;
         width: auto;
-        height: 300px;
-        max-width:100%;
+        height: 240px;
+        min-height:240px;
+        max-width: 100%;
     }
 </style>
 
 <div>
     <a asp-area="" asp-controller="SharedItems" asp-action="Details" asp-route-ID="@Model.ID">
-        <img class="myproduct-img" src=@Model.PictureLink alt="productpic">
+        <img class="myproduct-img" src="@Href("~" + Model.PictureLink)" alt="productpic">
     </a>
 </div>
 
@@ -19,12 +20,23 @@
 <div>
     <div>
         <a asp-area="" asp-controller="SharedItems" asp-action="Details" asp-route-ID="@Model.ID">
-            <h4> @Html.DisplayFor(modelitem => modelitem.Name)</h4>
-        </a>        
-        <h4> <span style="color:aquamarine">@Html.DisplayFor(modelitem => modelitem.Type)</span></h4>
-        <h4> <span style="color:chocolate">@Html.DisplayFor(modelitem => modelitem.Category.Name)</span></h4>
+            <h4>
+                @Html.DisplayFor(modelitem => modelitem.Name)
+                <span class="name-posttime">(@Model.PostElapsedDays)</span>
+            </h4>
+        </a>
+
+        <h4> <span class="stuff-type"> @Html.DisplayFor(modelitem => modelitem.Type)</span> </h4>
+        <h4> <span class="stuff-category"> @Html.DisplayFor(modelitem => modelitem.Category.Name)</span> </h4>
+
+        <h4 strength> Contact Info.:</h4>
+        <h4 class="stuff-indent" > <span class="glyphicon glyphicon-envelope" /> <span class="stuff-contactinfo" > @Html.DisplayFor(modelitem => modelitem.ContactorEmail)</span > </h4 >
+        <h4 class="stuff-indent" > <span class="glyphicon glyphicon-phone" /> <span class="stuff-contactinfo" > @Html.DisplayFor(modelitem => modelitem.ContactorPhone)</span > </h4 >
     </div>
+
     <div>
-        <button type="button" class="btn btn-primary" onclick="location.href=''"><span class="glyphicon glyphicon-shopping-cart"/> Add to Favorites</button> 
+        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddToCart", "ShoppingCart", new { id = Model.ID })'"><span class="glyphicon glyphicon-star" />Favorites</button>
+        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Details", "SharedItems", new { id = Model.ID })'"> <span class="glyphicon glyphicon-th" /> Details</button>
     </div>
 </div>
+

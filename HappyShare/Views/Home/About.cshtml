@@ -1,7 +1,75 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "About us";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
+<br />
+<div>
+    <div class="jumbotron text-center">
+        <h1>Happy Share</h1>
+        <p>We specialize in making the most of resources</p>
+
+        <br />
+        <h4>
+            Happy Share is a non-profit online sharing website, established in 2018. We intend to provide a platform for people to share their stuff that not used by themselves.
+        </h4>
+    </div> 
+</div>
+
+<div id="map" style="width:100%;height:300px"></div>
+<br />
+<div class="container text-center" style="text-align:left">
+    <br>
+    <div class="row">
+        <div class="col-lg-6">
+            <h3><strong>Contact</strong></h3>
+            <h4>
+                <strong>Address: </strong> 139 Carrington Rd, Mount Albert, Auckland 1025<br>
+            </h4>
+            <h4>
+                <strong>Phone: </strong> 09 800-98727
+            </h4>
+            <br />
+
+        </div>
+        <div class="col-lg-6">
+            <h3><strong>Service</strong></h3>
+            <h4>
+                <strong>Support  : </strong> <a href="mailto:Support@HappyShare.nz.org">  Support@HappyShare.nz.org</a><br>
+            </h4>
+            <h4>
+                <strong>Donation: </strong><a href="mailto:Donation@HappyShare.nz.org">Donation@HappyShare.nz.org</a>
+            </h4>            <br />
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    function initMap() {
+        //var myLatLng = { lat: -36.86293, lng: 174.8562 };
+        var myLatLng = { lat: -36.879866, lng: 174.708396 };
+
+        // for showing stuff.
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: myLatLng
+        });
+
+        // set marker, showing stuff position in map
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Quality Souvenir'
+        });
+
+        // get location from clieck event: for set postion when sharing stuff.
+        map.addListener('click', function (e) {
+            map.setZoom(8);
+            map.setCenter(e.latLng);
+        });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnChPKz4KMrT60Mo10p13CMjP2MZ8Nmo8&callback=initMap">
+</script>

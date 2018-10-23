@@ -16,31 +16,31 @@
         <div class="item active">
             <img src="~/images/sample/table.jpg" alt="bed" class="img-responsive" />
             <div class="carousel-caption" role="option">
-                <p> Paua shell red tiki pendant</p>
+                <p> Excellent table</p>
             </div>
         </div>
         <div class="item">
-            <img src="~/images/Sample/Bed.jpg" alt="maorigift" class="img-responsive" />
+            <img src="~/images/Sample/Bed.jpg" alt="Good stuff" class="img-responsive" />
             <div class="carousel-caption" role="option">
-                <p>Paua shell skull pendant</p>
+                <p>Kingsize bed</p>
             </div>
         </div>
         <div class="item">
-            <img src="~/images/Sample/TV.jpg" alt="maorigift" class="img-responsive" />
+            <img src="~/images/Sample/TV.jpg" alt="Good stuff" class="img-responsive" />
             <div class="carousel-caption" role="option">
-                <p>Pohutukawa flower and leaf pendant</p>
+                <p>A almost brand new TV set</p>
             </div>
         </div>
         <div class="item">
-            <img src="~/images/Sample/Dog.jpg" alt="maorigift" class="img-responsive" />
+            <img src="~/images/Sample/Dog.jpg" alt="Good stuff" class="img-responsive" />
             <div class="carousel-caption" role="option">
-                <p>Green jade infinity twist pendant</p>
+                <p>Lovely doggy</p>
             </div>
         </div>
         <div class="item">
-            <img src="~/images/Sample/WashingMachine.jpg" alt="maorigift" class="img-responsive" />
+            <img src="~/images/Sample/WashingMachine.jpg" alt="Good stuff" class="img-responsive" />
             <div class="carousel-caption" role="option">
-                <p>Greenstone teardrop earring</p>
+                <p>Wahing machine</p>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
     <div class="row">
         @{
             var i = 0;
-            IEnumerable<SharedItem> pp = Model.SharedItems.OrderByDescending(s => s.ID).Take(6);
+            IEnumerable<SharedItem> pp = Model.SharedItems.OrderByDescending(s => s.PostTime).Take(6);
             foreach (SharedItem p in pp)
             {
                 <div class="col-md-4" style="height:25%">

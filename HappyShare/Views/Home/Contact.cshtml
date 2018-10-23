@@ -5,11 +5,13 @@
 <h3>@ViewData["Message"]</h3>
 
 <!-- This is an example code for Google map API usage -->
-<div id="map" style="width:300px;height:150px"></div>
+<!-- <div id="map" style="width:300px;height:150px"></div> -->
+<div id="map" style="width:90%;height:300px"></div>
 <script>
 
     function initMap() {
-        var myLatLng = { lat: -36.86293, lng: 174.8562 };
+        //var myLatLng = { lat: -36.86293, lng: 174.8562 };
+        var myLatLng = { lat: -36.879866, lng: 174.708396 };
 
         // for showing stuff.
         var map = new google.maps.Map(document.getElementById('map'), {
